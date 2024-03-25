@@ -6,20 +6,33 @@
 Welcome to your new app.
 
 <div style="padding-left: 40vw;">
-    <button @onclick="Open">click</button>
+    <button @onclick="ToggleViewer">Viewer Test</button>
+    <button @onclick="ToggleEditor">Editor Test</button>
 
-    @if (open)
+    @if (openViewer)
     {
-<TableViewer Data="test" Options="optionForTest"/>
+        <h1>ViewerTest</h1>
+        <TableViewer Data="test" Options="optionForTest"/>
+        <TableViewer Data="person" Options="personOption"/>
+        @if (optionForPeople != null)
+        {
+            <TableViewer Data="people" Options="optionForPeople"/>
+        }
 
-<TableViewer Data="person" Options="personOption"/>
+        <TableViewer Data="peopleRecord"/>
+    }
 
-@if (optionForPeople != null)
-{
-    <TableViewer Data="people" Options="optionForPeople"/>
-}
+    @if (openEditor)
+    {
+        <h1>EditorTest</h1>
+        <TableEditor Data="test" Options="optionForTest" DataChanged="async (d) => {test = d;  await ConsoleWrite(d);}" />
+        <TableEditor Data="person" Options="personOption" DataChanged="async (d) => {person = d as Person;  await ConsoleWrite(d);}" />
+        @if (optionForPeople != null)
+        {
+            <TableEditor Data="people" Options="optionForPeople" DataChanged="async (d) => {people = d as Person[];  await ConsoleWrite(d);}" />
+        }
 
-<TableViewer Data="peopleRecord"/>
+        <TableEditor Data="peopleRecord" DataChanged="async (d) => {peopleRecord = d as PersonRecord[];  await ConsoleWrite(d);}" />
     }
 </div>
 
@@ -75,6 +88,7 @@ Welcome to your new app.
                 ["age"] = 12,
                 ["true"] = true,
                 ["false"] = false,
+                ["double"] = 1.1d,
             },
             People = new PersonRecord[]
             {
@@ -168,10 +182,16 @@ Welcome to your new app.
         await Js.InvokeVoidAsync("console.log", obj);
     }
 
-    bool open = false;
-    private Task Open()
+    bool openViewer = false;
+    bool openEditor = false;
+    private Task ToggleViewer()
     {
-        open = true;
+        openViewer = !openViewer;
+        return Task.CompletedTask;
+    }
+    private Task ToggleEditor()
+    {
+        openEditor = !openEditor;
         return Task.CompletedTask;
     }
 }
