@@ -1,0 +1,19 @@
+﻿@inherits TvEditorBase
+
+<input type="text" @onchange="OnChangeData" value="@Data"/>
+<style>
+    .empty-string {
+        color: #bbb;
+        font-style: italic;
+    }
+</style>
+
+@code {
+    [Parameter] public string Data { get; set; } = null!;
+
+    async Task OnChangeData(ChangeEventArgs arg)
+    {
+        Data = arg.Value?.ToString() ?? string.Empty;
+        await EmitDataChanged(Data);
+    }
+}

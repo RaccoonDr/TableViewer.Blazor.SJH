@@ -1,0 +1,56 @@
+﻿@inherits TvEditorBase
+@using System.Collections
+
+@if (Data is null)
+{
+    <TvNullEditor />
+}
+else if (IsNumber)
+{
+    <div class="table-cell">
+        <TvNumberEditor Data="Data!" Options="Options" Depth="Depth" DataChanged="DataChanged" />
+    </div>
+}
+else if (Data is bool boolData)
+{
+    <div class="table-cell">
+        <TvBooleanEditor Data="boolData" Options="Options" Depth="Depth" DataChanged="DataChanged" />
+    </div>
+}
+else if (Data is DateTime datetimeData)
+{
+    <div class="table-cell">
+        <TvDateTimeEditor Data="datetimeData" Options="Options" Depth="Depth" DataChanged="DataChanged" />
+    </div>
+}
+else if (Data is string stringData)
+{
+    <div class="table-cell">
+        <TvStringEditor Data="@stringData" Options="Options" Depth="Depth" DataChanged="DataChanged" />
+    </div>
+}
+else if (Data is IDictionary dictionary)
+{
+    <div class="table-cell">
+        <TvDictionaryEditor Data="dictionary" Options="Options" Depth="Depth" DataChanged="DataChanged" />
+    </div>
+}
+else if (IsObjectArray)
+{
+    var array = (Data as IEnumerable)!.Cast<object?>();
+    <div class="table-cell">
+        <TvObjectArrayEditor Data="array" Options="Options" Depth="Depth" DataChanged="DataChanged" />
+    </div>
+}
+else if (Data is IEnumerable enumerableData && !(Data is IDictionary))
+{
+    <div class="table-cell">
+        <TvArrayEditor Data="enumerableData" Options="Options" Depth="Depth" DataChanged="DataChanged" />
+    </div>
+}
+else
+{
+    <div class="table-cell">
+        <TvObjectEditor Data="Data" Options="Options" Depth="Depth" DataChanged="DataChanged" />
+    </div>
+}

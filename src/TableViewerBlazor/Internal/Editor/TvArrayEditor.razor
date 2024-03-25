@@ -1,0 +1,59 @@
+@inherits TvEditorBase
+
+<div class="table-array">
+  @if (Open && DataArray != null && all != null)
+  {
+  <table class="table-viewer">
+    <thead>
+      <tr>
+        <th @onclick="ToggleOpen" class="title" colspan="3">
+          <div class="title-wrap">
+            <span class="key-name">
+              (@all.Count() items)
+            </span>
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var (index, item) in DataArray)
+      {
+        <tr>
+          <td class="index">@index</td>
+          <td class="item">
+            <TvElementEditor Data="@item" Options="Options" Depth="Depth + 1" DataChanged="(data) => OnChangeData(index, data)" />
+          </td>
+          <td class="item">
+            @foreach (var action in Options?.Actions ?? Enumerable.Empty<ITvAction>())
+            {
+              @if (action.Condition(item, Depth))
+              {
+                <button @onclick="@(() => action.Action(item))">
+                  @action.Label
+                </button>
+              }
+            }
+          </td>
+        </tr>
+      }
+      @if (HasMoreItems)
+      {
+        <tr>
+          <td class="index"></td>
+          <td>
+            <button @onclick="@(() => MoreItems())">
+              more
+            </button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+  }
+  else
+  {
+    <div class="title" @onclick="ToggleOpen">
+      array (length: @(all?.Count() ?? 0))
+    </div>
+  }
+</div>

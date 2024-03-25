@@ -1,0 +1,63 @@
+﻿@inherits TvEditorBase
+
+<input type="number" @onchange="OnChangeData" value="@Data"/>
+
+<style>
+    :host {
+        display: flex;
+        align-items: center;
+    }
+</style>
+
+@code {
+    [Parameter] public object Data { get; set; } = null!;
+
+    [Parameter] public bool AlighRight { get; set; } = false;
+
+    private string align => AlighRight ? "right" : string.Empty;
+
+    async Task OnChangeData(ChangeEventArgs arg)
+    {
+        switch (Data)
+        {
+            case byte:
+            {
+                byte.TryParse(arg.Value?.ToString() ?? "0", out var val);
+                Data = val;
+                break;
+            }
+            case int:
+            {
+                int.TryParse(arg.Value?.ToString() ?? "0", out var val);
+                Data = val;
+                break;
+            }
+            case long:
+            {
+                long.TryParse(arg.Value?.ToString() ?? "0", out var val);
+                Data = val;
+                break;
+            }
+            case float:
+            {
+                float.TryParse(arg.Value?.ToString() ?? "0", out var val);
+                Data = val;
+                break;
+            }
+            case double:
+            {
+                double.TryParse(arg.Value?.ToString() ?? "0", out var val);
+                Data = val;
+                break;
+            }
+            case decimal:
+            {
+                decimal.TryParse(arg.Value?.ToString() ?? "0", out var val);
+                Data = val;
+                break;
+            }
+        };
+
+        await EmitDataChanged(Data);
+    }
+}

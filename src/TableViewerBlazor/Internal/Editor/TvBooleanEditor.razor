@@ -1,0 +1,29 @@
+﻿@inherits TvEditorBase
+
+<select @onchange="OnChangeData">
+    <option class="value-true" value="true" selected="@(Data == true)">TRUE</option>
+    <option class="value-false" value="false" selected="@(Data == false)">FALSE</option>
+</select>
+
+<style>
+    :host {
+        display: flex;
+        align-items: center;
+    }
+    .value-true {
+        font-weight: bold;
+    }
+    .value-false {
+        color: #999;
+    }
+</style>
+
+@code {
+    [Parameter] public bool Data { get; set; }
+
+    async Task OnChangeData(ChangeEventArgs arg)
+    {
+        Data = Boolean.Parse(arg.Value?.ToString() ?? "false");
+        await EmitDataChanged(Data);
+    }
+}
